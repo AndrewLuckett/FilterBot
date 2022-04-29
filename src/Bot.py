@@ -11,9 +11,12 @@ from string import punctuation
 client = discord.Client()
 words = {}
 blacklist = set()
+ingorePrefixes = set()
 last = ("", "")
 
 def start():
+    global ingorePrefixes
+
     wordlist = cfg.get("replacer", required = True)
     with offsetOpen(wordlist) as file:
         reader = csv.reader(file, skipinitialspace = True)
@@ -25,17 +28,23 @@ def start():
         for line in file:
             blacklist.add(line[:-1])
 
+    ingorePrefixes = set([i for i in cfg.get("botPrefixes")])
+
     client.run(cfg.get("BotToken", required = True))
 
 
 @client.event
 async def on_ready():
-    log(words)
-    log(blacklist)
+    log(f"Wordlist:\n\t{words}")
+    log(f"Blacklist:\n\t{blacklist}")
+    log(f"IgnoringPrefixes:\n\t{ingorePrefixes}")
+    log(f"TriggeredBy:\n\t{cfg.get(botTrigger)}")
     log(f"Bot Ready and in {len(client.guilds)} servers")
 
     for s in client.guilds:
         log("\t" + s.name)
+
+    log("")
 
 
 @client.event
@@ -43,9 +52,13 @@ async def on_message(message):
     global last
     
     if message.content.startswith(cfg.get("botTrigger", required = True)):
-        log(f"Original: {last[0]}", f"Replaced: {last[1]}", "")
+        log(message.content, f"Original: {last[0]}", f"Replaced: {last[1]}", "")
         await message.channel.send("Error Reported")
         return
+
+    for p in ingorePrefixes:
+        if message.content.startswith(p):
+            return
 
     author = message.author
 
