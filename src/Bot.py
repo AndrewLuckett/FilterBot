@@ -38,7 +38,7 @@ async def on_ready():
     log(f"Wordlist:\n\t{words}")
     log(f"Blacklist:\n\t{blacklist}")
     log(f"IgnoringPrefixes:\n\t{ingorePrefixes}")
-    log(f"TriggeredBy:\n\t{cfg.get(botTrigger)}")
+    log(f"TriggeredBy:\n\t{cfg.get('botTrigger')}")
     log(f"Bot Ready and in {len(client.guilds)} servers")
 
     for s in client.guilds:
