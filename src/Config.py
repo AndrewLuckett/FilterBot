@@ -7,6 +7,10 @@ _config = {}
 
 def setConfigVar(key, value):
     global _config
+    if key in _config:
+        assert False, f"Cannot override config vars ({key})"
+        return
+
     try:
         value = float(value)
     except:
@@ -16,16 +20,15 @@ def setConfigVar(key, value):
 
 def getConfigVar(key, default = None, required = False):
     global _config
-    if key not in _config:
-        if required:
-            raise Exception(f"Key ({key}) not found in config Dict")
-        return default
-    return _config.get(key)
+    if key not in _config and required:
+        raise Exception(f"Key ({key}) not found in config Dict")
+
+    return _config.get(key, default)
 
 
 def isConfigVar(key):
     global _config
-    return key in _config.keys()
+    return key in _config
 
 
 #Short names
