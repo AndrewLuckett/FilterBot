@@ -7,6 +7,7 @@ import csv
 from FileLoader import *
 import random
 from string import punctuation
+from datetime import datetime
 
 client = discord.Client()
 words = {}
@@ -35,6 +36,8 @@ def start():
 
 @client.event
 async def on_ready():
+    theTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    log(f"Bot started on {theTime}")
     log(f"Wordlist:\n\t{words}")
     log(f"Blacklist:\n\t{blacklist}")
     log(f"IgnoringPrefixes:\n\t{ingorePrefixes}")
