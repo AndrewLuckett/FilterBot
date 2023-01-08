@@ -21,6 +21,7 @@ def loadConfig(path, conf = {}, badcom = []):
 def main():
     cfg.setConfigVar("pathOffset", "../")
     # back out of src folder
+    # and so we can use fileLoader without it shitting the bed
 
     # Load configs
     conf, badcommands = loadConfig("rsc/default.cfg")
